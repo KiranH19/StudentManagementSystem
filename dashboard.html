@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard · Student Management System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-shell">
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark js-brand-mark">SM</div>
+      <div class="brand-text">
+        <strong class="js-institute-name">Brightpath</strong>
+        <span>Admin Panel</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <a href="dashboard.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+      <a href="students.html" class="nav-link"><i class="fa-solid fa-user-graduate"></i> Students</a>
+      <a href="attendance.html" class="nav-link"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
+      <a href="fees.html" class="nav-link"><i class="fa-solid fa-money-bill-wave"></i> Fees</a>
+      <div class="nav-section-label">Academics</div>
+      <a href="batches.html" class="nav-link"><i class="fa-solid fa-layer-group"></i> Batches</a>
+      <a href="teachers.html" class="nav-link"><i class="fa-solid fa-chalkboard-user"></i> Teachers</a>
+      <a href="exams.html" class="nav-link"><i class="fa-solid fa-file-pen"></i> Exams</a>
+      <div class="nav-section-label">System</div>
+      <a href="settings.html" class="nav-link"><i class="fa-solid fa-gear"></i> Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="#" class="nav-link js-logout" style="color:var(--danger);"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN AREA ============ -->
+  <div class="main-area">
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+      <div class="topbar-title">Dashboard<span>Overview of your institute today</span></div>
+      <div class="topbar-search"><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="Search students, batches..."></div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="themeToggle"><i class="fa-solid fa-moon"></i></button>
+        <button class="icon-btn" id="notifBtn"><i class="fa-regular fa-bell"></i><span class="dot"></span></button>
+        <div class="user-chip">
+          <div class="user-avatar js-user-avatar">A</div>
+          <div>
+            <div class="u-name js-user-name">Admin</div>
+            <div class="u-role">Administrator</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="notif-panel" id="notifPanel">
+      <div class="notif-head"><h4>Notifications</h4><button>Mark all read</button></div>
+      <div class="notif-list"></div>
+    </div>
+
+    <main class="content">
+
+      <!-- Quick actions -->
+      <div class="flex gap-12 mb-16" style="flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="location.href='students.html'"><i class="fa-solid fa-user-plus"></i> Add Student</button>
+        <button class="btn btn-outline" onclick="location.href='attendance.html'"><i class="fa-solid fa-calendar-check"></i> Mark Attendance</button>
+        <button class="btn btn-outline" onclick="location.href='fees.html'"><i class="fa-solid fa-receipt"></i> Collect Fee</button>
+        <button class="btn btn-outline" onclick="location.href='exams.html'"><i class="fa-solid fa-file-circle-plus"></i> Create Exam</button>
+      </div>
+
+      <!-- Stat cards -->
+      <div class="grid grid-4 mb-16" id="statCards">
+        <!-- injected by dashboard.js -->
+      </div>
+
+      <div class="grid" style="grid-template-columns:2fr 1fr; gap:18px;" id="chartsRow">
+        <div class="card">
+          <div class="card-head">
+            <h3>Fee Collection Trend</h3>
+            <span class="muted text-sm">Last 6 months</span>
+          </div>
+          <canvas id="feeChart" height="130"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Students by Batch</h3></div>
+          <canvas id="batchChart" height="180"></canvas>
+        </div>
+      </div>
+
+      <div class="grid mt-16" style="grid-template-columns:1fr 1fr;gap:18px;">
+        <div class="card">
+          <div class="card-head">
+            <h3>Recent Activities</h3>
+            <span class="muted text-sm">Latest updates</span>
+          </div>
+          <ul id="activityList"></ul>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3>Upcoming Exams</h3>
+            <a href="exams.html" class="text-sm" style="color:var(--primary);font-weight:700;">View all</a>
+          </div>
+          <ul id="examList"></ul>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

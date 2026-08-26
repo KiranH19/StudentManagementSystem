@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exams · Student Management System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand"><div class="brand-mark js-brand-mark">SM</div><div class="brand-text"><strong class="js-institute-name">Brightpath</strong><span>Admin Panel</span></div></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <a href="dashboard.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+      <a href="students.html" class="nav-link"><i class="fa-solid fa-user-graduate"></i> Students</a>
+      <a href="attendance.html" class="nav-link"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
+      <a href="fees.html" class="nav-link"><i class="fa-solid fa-money-bill-wave"></i> Fees</a>
+      <div class="nav-section-label">Academics</div>
+      <a href="batches.html" class="nav-link"><i class="fa-solid fa-layer-group"></i> Batches</a>
+      <a href="teachers.html" class="nav-link"><i class="fa-solid fa-chalkboard-user"></i> Teachers</a>
+      <a href="exams.html" class="nav-link"><i class="fa-solid fa-file-pen"></i> Exams</a>
+      <div class="nav-section-label">System</div>
+      <a href="settings.html" class="nav-link"><i class="fa-solid fa-gear"></i> Settings</a>
+    </nav>
+    <div class="sidebar-footer"><a href="#" class="nav-link js-logout" style="color:var(--danger);"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></div>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+      <div class="topbar-title">Exams<span>Create exams, enter marks, view rank lists</span></div>
+      <div class="topbar-search"><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="Search students, batches..."></div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="themeToggle"><i class="fa-solid fa-moon"></i></button>
+        <button class="icon-btn" id="notifBtn"><i class="fa-regular fa-bell"></i><span class="dot"></span></button>
+        <div class="user-chip"><div class="user-avatar js-user-avatar">A</div><div><div class="u-name js-user-name">Admin</div><div class="u-role">Administrator</div></div></div>
+      </div>
+    </header>
+    <div class="notif-panel" id="notifPanel"><div class="notif-head"><h4>Notifications</h4><button>Mark all read</button></div><div class="notif-list"></div></div>
+
+    <main class="content">
+      <div class="toolbar">
+        <h3 class="section-title" style="margin:0;font-size:16px;">All Exams</h3>
+        <button class="btn btn-primary" style="margin-left:auto;" id="addExamBtn"><i class="fa-solid fa-file-circle-plus"></i> Create Exam</button>
+      </div>
+
+      <div class="grid grid-3" id="examGrid"></div>
+    </main>
+  </div>
+</div>
+
+<!-- Create Exam Modal -->
+<div class="modal-overlay" id="examModal">
+  <div class="modal">
+    <div class="modal-head"><h3>Create Exam</h3><button class="modal-close" onclick="closeModal('examModal')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <form id="examForm" novalidate>
+        <div class="form-grid">
+          <div class="form-field full" data-field><label>Exam Name <span class="req">*</span></label><input type="text" name="name" placeholder="e.g. Unit Test 3" required><span class="error-text">Exam name is required</span></div>
+          <div class="form-field" data-field><label>Batch <span class="req">*</span></label><select name="batchId" id="examBatchSelect" required></select><span class="error-text">Please select a batch</span></div>
+          <div class="form-field" data-field><label>Date <span class="req">*</span></label><input type="date" name="date" required><span class="error-text">Please pick a date</span></div>
+          <div class="form-field" data-field><label>Max Marks <span class="req">*</span></label><input type="number" name="maxMarks" min="1" value="100" required><span class="error-text">Enter max marks</span></div>
+          <div class="form-field" data-field><label>Passing Marks <span class="req">*</span></label><input type="number" name="passMarks" min="1" value="35" required><span class="error-text">Enter passing marks</span></div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-foot"><button class="btn btn-outline" onclick="closeModal('examModal')">Cancel</button><button class="btn btn-primary" id="saveExamBtn">Create Exam</button></div>
+  </div>
+</div>
+
+<!-- Enter Marks / Results Modal -->
+<div class="modal-overlay" id="marksModal">
+  <div class="modal modal-lg">
+    <div class="modal-head"><h3 id="marksModalTitle">Enter Marks</h3><button class="modal-close" onclick="closeModal('marksModal')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="tab-row" style="margin-bottom:14px;">
+        <button class="tab-btn active" data-mtab="entry">Enter Marks</button>
+        <button class="tab-btn" data-mtab="results">Results & Rank List</button>
+      </div>
+      <div id="mtab-entry">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Student</th><th>Roll No.</th><th style="width:140px;">Marks Obtained</th></tr></thead>
+            <tbody id="marksEntryBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="mtab-results" style="display:none;">
+        <div class="grid grid-3 mb-16" id="resultStats"></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Rank</th><th>Student</th><th>Marks</th><th>Percentage</th><th>Result</th></tr></thead>
+            <tbody id="rankListBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" id="exportResultsBtn"><i class="fa-solid fa-file-export"></i> Export</button>
+      <button class="btn btn-primary" id="saveMarksBtn">Save Marks</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/exams.js"></script>
+</body>
+</html>

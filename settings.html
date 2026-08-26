@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings · Student Management System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand"><div class="brand-mark js-brand-mark">SM</div><div class="brand-text"><strong class="js-institute-name">Brightpath</strong><span>Admin Panel</span></div></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <a href="dashboard.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+      <a href="students.html" class="nav-link"><i class="fa-solid fa-user-graduate"></i> Students</a>
+      <a href="attendance.html" class="nav-link"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
+      <a href="fees.html" class="nav-link"><i class="fa-solid fa-money-bill-wave"></i> Fees</a>
+      <div class="nav-section-label">Academics</div>
+      <a href="batches.html" class="nav-link"><i class="fa-solid fa-layer-group"></i> Batches</a>
+      <a href="teachers.html" class="nav-link"><i class="fa-solid fa-chalkboard-user"></i> Teachers</a>
+      <a href="exams.html" class="nav-link"><i class="fa-solid fa-file-pen"></i> Exams</a>
+      <div class="nav-section-label">System</div>
+      <a href="settings.html" class="nav-link"><i class="fa-solid fa-gear"></i> Settings</a>
+    </nav>
+    <div class="sidebar-footer"><a href="#" class="nav-link js-logout" style="color:var(--danger);"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></div>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+      <div class="topbar-title">Settings<span>Configure your institute profile and preferences</span></div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="themeToggle"><i class="fa-solid fa-moon"></i></button>
+        <button class="icon-btn" id="notifBtn"><i class="fa-regular fa-bell"></i><span class="dot"></span></button>
+        <div class="user-chip"><div class="user-avatar js-user-avatar">A</div><div><div class="u-name js-user-name">Admin</div><div class="u-role">Administrator</div></div></div>
+      </div>
+    </header>
+    <div class="notif-panel" id="notifPanel"><div class="notif-head"><h4>Notifications</h4><button>Mark all read</button></div><div class="notif-list"></div></div>
+
+    <main class="content" style="max-width:820px;">
+      <div class="card mb-16">
+        <div class="card-head"><h3>Institute Profile</h3></div>
+        <form id="settingsForm" novalidate>
+          <div class="upload-box" id="logoBox" style="margin-bottom:18px;max-width:240px;">
+            <img id="logoPreview" class="avatar-preview" style="display:none;">
+            <i class="fa-solid fa-building-columns" id="logoIcon"></i>
+            <p>Click to upload institute logo</p>
+            <input type="file" id="logoInput" accept="image/*" style="display:none;">
+          </div>
+          <div class="form-grid">
+            <div class="form-field full" data-field><label>Institute Name <span class="req">*</span></label><input type="text" name="instituteName" required><span class="error-text">Institute name is required</span></div>
+            <div class="form-field full" data-field><label>Address</label><textarea name="address" rows="2"></textarea></div>
+            <div class="form-field" data-field><label>Phone <span class="req">*</span></label><input type="tel" name="phone" required><span class="error-text">Enter a valid phone number</span></div>
+            <div class="form-field" data-field><label>Email <span class="req">*</span></label><input type="email" name="email" required><span class="error-text">Enter a valid email</span></div>
+          </div>
+          <div class="flex" style="justify-content:flex-end;margin-top:18px;">
+            <button type="submit" class="btn btn-primary" id="saveSettingsBtn"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>Theme Settings</h3></div>
+        <div class="flex items-center justify-between" style="padding:6px 0;">
+          <div>
+            <div class="fw-700 text-sm">Dark Mode</div>
+            <div class="muted text-sm">Switch between light and dark interface themes</div>
+          </div>
+          <button class="btn btn-outline" id="settingsThemeToggle"><i class="fa-solid fa-moon"></i> <span id="themeLabel">Enable Dark Mode</span></button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/settings.js"></script>
+</body>
+</html>

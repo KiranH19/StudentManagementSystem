@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Students · Student Management System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark js-brand-mark">SM</div>
+      <div class="brand-text"><strong class="js-institute-name">Brightpath</strong><span>Admin Panel</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <a href="dashboard.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+      <a href="students.html" class="nav-link"><i class="fa-solid fa-user-graduate"></i> Students</a>
+      <a href="attendance.html" class="nav-link"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
+      <a href="fees.html" class="nav-link"><i class="fa-solid fa-money-bill-wave"></i> Fees</a>
+      <div class="nav-section-label">Academics</div>
+      <a href="batches.html" class="nav-link"><i class="fa-solid fa-layer-group"></i> Batches</a>
+      <a href="teachers.html" class="nav-link"><i class="fa-solid fa-chalkboard-user"></i> Teachers</a>
+      <a href="exams.html" class="nav-link"><i class="fa-solid fa-file-pen"></i> Exams</a>
+      <div class="nav-section-label">System</div>
+      <a href="settings.html" class="nav-link"><i class="fa-solid fa-gear"></i> Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="#" class="nav-link js-logout" style="color:var(--danger);"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    </div>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+      <div class="topbar-title">Students<span>Manage admissions and student records</span></div>
+      <div class="topbar-search"><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="Search students, batches..."></div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="themeToggle"><i class="fa-solid fa-moon"></i></button>
+        <button class="icon-btn" id="notifBtn"><i class="fa-regular fa-bell"></i><span class="dot"></span></button>
+        <div class="user-chip"><div class="user-avatar js-user-avatar">A</div><div><div class="u-name js-user-name">Admin</div><div class="u-role">Administrator</div></div></div>
+      </div>
+    </header>
+
+    <div class="notif-panel" id="notifPanel"><div class="notif-head"><h4>Notifications</h4><button>Mark all read</button></div><div class="notif-list"></div></div>
+
+    <main class="content">
+      <div class="card">
+        <div class="toolbar">
+          <div class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="studentSearch" placeholder="Search by name, admission no, roll no..."></div>
+          <select class="select-filter" id="filterBatch"><option value="">All Batches</option></select>
+          <select class="select-filter" id="filterStatus">
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+          <div style="margin-left:auto;" class="flex gap-8">
+            <button class="btn btn-outline btn-sm" id="exportBtn"><i class="fa-solid fa-file-export"></i> Export</button>
+            <button class="btn btn-outline btn-sm" id="printBtn"><i class="fa-solid fa-print"></i> Print</button>
+            <button class="btn btn-primary" id="addStudentBtn"><i class="fa-solid fa-user-plus"></i> Add Student</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Student</th><th>Admission No.</th><th>Roll No.</th><th>Course / Batch</th>
+                <th>Fees</th><th>Status</th><th style="text-align:right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="studentsTableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <span class="muted" id="paginationInfo"></span>
+          <div class="page-btns" id="paginationBtns"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Add/Edit Student Modal -->
+<div class="modal-overlay" id="studentModal">
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <h3 id="studentModalTitle">Add Student</h3>
+      <button class="modal-close" onclick="closeModal('studentModal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="studentForm" novalidate>
+        <input type="hidden" name="id">
+        <div class="upload-box" id="photoUploadBox" style="margin-bottom:18px;">
+          <img id="photoPreview" class="avatar-preview" src="" style="display:none;">
+          <i class="fa-solid fa-camera" id="photoIcon"></i>
+          <p>Click to upload student photo (optional)</p>
+          <input type="file" id="photoInput" accept="image/*" style="display:none;">
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field" data-field><label>Full Name <span class="req">*</span></label><input type="text" name="name" required><span class="error-text">Name is required</span></div>
+          <div class="form-field" data-field><label>Admission Number <span class="req">*</span></label><input type="text" name="admissionNo" required><span class="error-text">Admission number is required</span></div>
+          <div class="form-field" data-field><label>Roll Number <span class="req">*</span></label><input type="text" name="rollNo" required><span class="error-text">Roll number is required</span></div>
+          <div class="form-field" data-field><label>Date of Birth</label><input type="date" name="dob"></div>
+          <div class="form-field" data-field><label>Course <span class="req">*</span></label>
+            <select name="course" required>
+              <option value="">Select course</option>
+              <option value="NEET">NEET</option>
+              <option value="JEE">JEE</option>
+              <option value="Foundation">Foundation</option>
+              <option value="CET">CET</option>
+            </select>
+            <span class="error-text">Please select a course</span>
+          </div>
+          <div class="form-field" data-field><label>Batch <span class="req">*</span></label>
+            <select name="batchId" id="batchSelect" required></select>
+            <span class="error-text">Please select a batch</span>
+          </div>
+          <div class="form-field" data-field><label>Parent / Guardian Name <span class="req">*</span></label><input type="text" name="parentName" required><span class="error-text">Parent name is required</span></div>
+          <div class="form-field" data-field><label>Parent Phone <span class="req">*</span></label><input type="tel" name="parentPhone" required><span class="error-text">Enter a valid phone number</span></div>
+          <div class="form-field" data-field><label>Aadhar Number</label><input type="text" name="aadharNo" placeholder="12-digit Aadhar number" maxlength="12" inputmode="numeric"><span class="error-text">Aadhar number must be exactly 12 digits</span><span class="field-hint">Optional — used for admissions &amp; scholarship records</span></div>
+          <div class="form-field" data-field><label>SATS Number</label><input type="text" name="satsNo" placeholder="Karnataka SATS number" maxlength="15"><span class="error-text">Enter a valid SATS number</span><span class="field-hint">Optional — Student Achievement Tracking System ID</span></div>
+          <div class="form-field full" data-field><label>Address</label><textarea name="address" rows="2"></textarea></div>
+          <div class="form-field" data-field><label>Total Fees (₹) <span class="req">*</span></label><input type="number" name="totalFees" min="0" required><span class="error-text">Enter total fees</span></div>
+          <div class="form-field" data-field><label>Join Date <span class="req">*</span></label><input type="date" name="joinDate" required><span class="error-text">Join date is required</span></div>
+          <div class="form-field"><label>Status</label>
+            <select name="status"><option value="active">Active</option><option value="inactive">Inactive</option></select>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeModal('studentModal')">Cancel</button>
+      <button class="btn btn-primary" id="saveStudentBtn"><span id="saveStudentText">Save Student</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- Student Profile View Modal -->
+<div class="modal-overlay" id="profileModal">
+  <div class="modal modal-lg">
+    <div class="modal-head"><h3>Student Profile</h3><button class="modal-close" onclick="closeModal('profileModal')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body" id="profileBody"></div>
+    <div class="modal-foot"><button class="btn btn-outline" onclick="closeModal('profileModal')">Close</button></div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/students.js"></script>
+</body>
+</html>
